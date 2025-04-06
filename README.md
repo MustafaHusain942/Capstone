@@ -35,20 +35,32 @@ VerdantScan brings together **computer vision** and **agriculture** to make dise
 
 ## ⚙️ Installation & Setup
 
-### 1. Clone the Repository
+### 📁 1. Clone the Repository
 
 ```bash
 git clone https://github.com/MustafaHusain942/VerdantScan.git
 cd VerdantScan
+```
 
-### 2. Install Dependencies
+### 📦 2. Install Required Dependencies
 
-```bash pip install -r requirements.txt ```
+```bash
+pip install -r requirements.txt 
+```
 
-### 3. Train & Save Model Weights
+### 🧠 3. Train the Model to Get Weights
 
-Run the .ipynb files inside the models/ folder to train and save your model weights
+Run the .ipynb files inside the Models/ folder to train and save your model weights
 
 🔁 Make sure to update the model path in app.py
+
+### 🚀 4. Run the Flask App
+
+```bash
+python app.py
+```
+```bash
+http://127.0.0.1:5000
+```
 
 
