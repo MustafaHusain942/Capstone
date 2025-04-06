@@ -26,4 +26,19 @@ VerdantScan brings together **computer vision** and **agriculture** to make dise
 - Source: [Kaggle – Plant Disease Recognition Dataset](https://www.kaggle.com/datasets/rashikrahmanpritom/plant-disease-recognition-dataset)
 - Categories: **Healthy**, **Powdery Mildew**, **Rust**
 - The dataset is split into:
+- dataset/ ├── train/ ├── test/ └── validation/
 
+---
+
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/MustafaHusain942/VerdantScan.git
+cd VerdantScan 
+
+### 2. Install Dependencies
