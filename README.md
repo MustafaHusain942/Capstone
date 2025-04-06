@@ -1,12 +1,14 @@
 # 🌱 VerdantScan
 
-**VerdantScan** is an AI-powered web application designed to identify plant leaf diseases using deep learning. With a simple image upload, the app can detect whether a plant leaf is **Healthy**, infected by **Powdery Mildew**, or suffering from **Rust Disease** — along with prevention and cure tips.
+**VerdantScan** is an intelligent, AI-powered web application developed to assist farmers, agriculturists, and plant enthusiasts in identifying diseases in plant leaves with ease and accuracy. Leveraging the power of deep learning and computer vision, VerdantScan is capable of analyzing leaf images to classify them into one of the following categories: Healthy, Powdery Mildew, or Rust Disease.
+
+With just a simple image upload, the application processes the image through trained Convolutional Neural Network (CNN) models to predict the plant’s health status in real-time. The results are not only limited to disease identification; VerdantScan also provides informative descriptions, prevention tips, and curative measures to help users take quick and effective action.
+
+Whether managing a large-scale farm or caring for your home garden, VerdantScan aims to bridge the gap between agriculture and artificial intelligence, promoting healthier crops and more informed decision-making through accessible, tech-driven solutions.
 
 ---
 
 📚 Table of Contents
-
-- 📌 Project Overview
 
 - ✨ Features
 
@@ -19,12 +21,6 @@
 - 🚀 How to Use
 
 - 🤝 Contributing
-
----
-
-## 📌 Project Overview
-
-VerdantScan brings together **computer vision** and **agriculture** to make disease detection easier for farmers, researchers, and gardeners. Leveraging **pre-trained CNN models**, this project simplifies early disease diagnosis for better crop management.
 
 ---
 
