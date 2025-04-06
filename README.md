@@ -37,7 +37,9 @@ VerdantScan brings together **computer vision** and **agriculture** to make dise
 
 ### 1. Clone the Repository
 
-```bash git clone https://github.com/MustafaHusain942/VerdantScan.git cd VerdantScan ```
+```bash
+git clone https://github.com/MustafaHusain942/VerdantScan.git
+cd VerdantScan```
 
 ### 2. Install Dependencies
 
