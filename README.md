@@ -37,12 +37,11 @@ VerdantScan brings together **computer vision** and **agriculture** to make dise
 
 ### 1. Clone the Repository
 
-git clone https://github.com/MustafaHusain942/VerdantScan.git
-cd VerdantScan
+```bash git clone https://github.com/MustafaHusain942/VerdantScan.git cd VerdantScan ```
 
 ### 2. Install Dependencies
 
-pip install -r requirements.txt
+```bash pip install -r requirements.txt ```
 
 ### 3. Train & Save Model Weights
 
