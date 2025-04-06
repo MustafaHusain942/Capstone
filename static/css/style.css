@@ -1,0 +1,278 @@
+:root {
+    --leaf-green: #4CAF50;
+    --soil-brown: #8D6E63;
+    --fungus-red: #E53935;
+    --dew-blue: #42A5F5;
+    --sun-yellow: #FFC107;
+    --bark-gray: #795548;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F5F5;
+}
+
+/* Header Styles */
+header {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95);
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.verdant-logo {
+    position: relative;
+    overflow: hidden;
+    font-size: 2.5rem;
+}
+
+.verdant-logo::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--leaf-green);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.verdant-logo:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Navigation Links */
+.nav-link {
+    position: relative;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--leaf-green);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-link:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Dark mode styles */
+.dark .nav-link {
+    color: #e5e7eb;
+}
+
+.dark .nav-link:hover {
+    color: white;
+}
+
+.nav-link.active {
+    color: white;
+    background-color: var(--leaf-green);
+}
+
+/* Typewriter Effect */
+.typewriter-text {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    position: relative;
+    text-align: center;
+    display: inline-block;
+}
+
+.typewriter-container {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.typewriter-container:hover .typewriter-text {
+    animation: typing 3s steps(40, end);
+}
+
+@keyframes typing {
+    0% { width: 0 }
+    100% { width: 100% }
+}
+
+/* Card Styles */
+.card {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.card-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Remove tint from Powdery Mildew image */
+.card:nth-child(2) .card-content::after {
+    display: none;
+}
+
+.card-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 1.5rem;
+    transform: translateY(100%);
+    transition: transform 0.5s ease;
+    overflow-y: auto;
+}
+
+.dark .card-info {
+    background-color: #1f2937;
+}
+
+.card:hover .card-content {
+    transform: translateY(-100%);
+}
+
+.card:hover .card-info {
+    transform: translateY(0);
+}
+
+/* Overlay for image tint */
+.card-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .card-content::after {
+    opacity: 0;
+}
+
+/* Dark mode text colors */
+.dark .card-info h3 {
+    color: #e5e7eb;
+}
+
+.dark .card-info p {
+    color: #d1d5db;
+}
+
+.dark .card-info li {
+    color: #d1d5db;
+}
+
+/* Sidebar Styles */
+#sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--leaf-green) transparent;
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--leaf-green);
+    border-radius: 3px;
+}
+
+.dark #sidebar::-webkit-scrollbar-thumb {
+    background-color: #4ade80;
+}
+
+/* Overlay Styles */
+#overlay {
+    transition: opacity 0.3s ease;
+}
+
+/* Sidebar Content Styles */
+#sidebar p {
+    line-height: 1.6;
+}
+
+#sidebar ul li {
+    line-height: 1.6;
+}
+
+/* Emoji Rain Animation */
+.emoji-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: fall linear forwards;
+    opacity: 0.8;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(calc(100vh + 100px)) rotate(360deg);
+        opacity: 0;
+    }
+} 

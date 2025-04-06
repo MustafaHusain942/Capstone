@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerdantScan - Plant Disease Detection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'leaf-green': '#4CAF50',
+                        'soil-brown': '#8D6E63',
+                        'fungus-red': '#E53935',
+                        'dew-blue': '#42A5F5',
+                        'sun-yellow': '#FFC107',
+                        'bark-gray': '#795548'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-md fixed w-full top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo and Name -->
+                <div class="flex items-center">
+                    <span class="verdant-logo text-[var(--leaf-green)] dark:text-green-400">VerdantScan</span>
+                </div>
+                
+                <!-- Navigation and Dark Mode Toggle -->
+                <div class="flex items-center space-x-8">
+                    <nav class="flex space-x-8">
+                        <a href="#" class="nav-link dark:text-gray-200">Home</a>
+                        <a href="#" id="aboutUsBtn" class="nav-link dark:text-gray-200">About Us</a>
+                    </nav>
+                    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300">
+                        <svg id="sunIcon" class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <svg id="moonIcon" class="w-6 h-6 text-yellow-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Add padding to account for fixed header -->
+    <div class="pt-20">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-[var(--leaf-green)] to-[var(--dew-blue)] text-white py-20">
+            <div class="container mx-auto px-4">
+                <div class="typewriter-container mb-6">
+                    <h1 class="text-4xl md:text-6xl font-bold typewriter-text">Plant Disease Detection</h1>
+                </div>
+                <div class="typewriter-container">
+                    <p class="text-xl typewriter-text whitespace-nowrap">Upload a leaf image to detect and diagnose plant diseases using advanced AI technology</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-12">
+            <!-- Upload Section -->
+            <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-12 transition-colors duration-300">
+                <form id="uploadForm" enctype="multipart/form-data" class="space-y-6">
+                    <div class="border-2 border-dashed border-[var(--leaf-green)] dark:border-green-400 rounded-lg p-8 text-center">
+                        <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                        <label for="imageUpload" class="cursor-pointer">
+                            <div class="text-[var(--leaf-green)] dark:text-green-400 text-6xl mb-4">📸</div>
+                            <p class="text-gray-600 dark:text-gray-300">Click to upload or drag and drop</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">PNG, JPG, JPEG up to 10MB</p>
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full bg-[var(--leaf-green)] text-white py-3 rounded-lg hover:bg-green-600 transition duration-300">
+                        Analyze Image
+                    </button>
+                </form>
+                
+                <div id="preview" class="mt-8 hidden">
+                    <img id="previewImage" class="max-w-full h-auto rounded-lg shadow-md" alt="Preview">
+                </div>
+                
+                <div id="result" class="mt-8 hidden">
+                    <h3 class="text-2xl font-semibold mb-4 dark:text-white">Analysis Result</h3>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                        <p class="text-lg mb-2 dark:text-gray-200">Disease: <span id="prediction" class="font-semibold"></span></p>
+                        <p class="text-lg dark:text-gray-200">Confidence: <span id="confidence" class="font-semibold"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disease Categories -->
+            <h2 class="text-3xl font-bold text-center mb-12 dark:text-white">Common Plant Diseases</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Healthy Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-colors duration-300">
+                    <div class="card-content">
+                        <img src="{{ url_for('static', filename='images/8bc2979962db6549.jpg') }}" alt="Healthy Leaf">
+                        <div class="absolute inset-0 bg-[var(--leaf-green)] opacity-20"></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="text-xl font-semibold text-[var(--leaf-green)] dark:text-green-400 mb-2">Healthy</h3>
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold">Status: Your plant is in great shape! 🌱</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Description: The leaf shows no visible signs of stress or disease. Color, texture, and veins are consistent.</p>
+                        <div class="mt-4">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold">Suggestions:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--leaf-green)] dark:text-green-400 mr-2">✓</span>
+                                    Continue regular watering and sunlight exposure
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--leaf-green)] dark:text-green-400 mr-2">✓</span>
+                                    Use organic compost for nourishment
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--leaf-green)] dark:text-green-400 mr-2">✓</span>
+                                    Inspect weekly for early signs of disease or pests
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Powdery Mildew Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-colors duration-300">
+                    <div class="card-content">
+                        <img src="{{ url_for('static', filename='images/8b7569be32192c1e.jpg') }}" alt="Powdery Mildew">
+                        <div class="absolute inset-0 bg-[var(--fungus-red)] opacity-20"></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="text-xl font-semibold text-[var(--fungus-red)] dark:text-red-400 mb-2">Powdery Mildew</h3>
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold">Status: Detected: Powdery Mildew ❄️</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Description: A fungal infection that causes white or grayish powder-like spots on the surface of the leaf.</p>
+                        <div class="mt-4">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold">Prevention Tips:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Ensure good air circulation around plants
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Avoid overhead watering – water the soil instead
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Remove affected leaves early to stop spread
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Space plants appropriately
+                                </li>
+                            </ul>
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mt-4">Natural Solutions:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Spray with diluted milk solution (1 part milk to 9 parts water)
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--fungus-red)] dark:text-red-400 mr-2">⚠️</span>
+                                    Use neem oil or baking soda spray
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rust Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-colors duration-300">
+                    <div class="card-content">
+                        <img src="{{ url_for('static', filename='images/8d0c3cc4636fc47d.jpg') }}" alt="Rust Disease">
+                        <div class="absolute inset-0 bg-[var(--bark-gray)] opacity-20"></div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="text-xl font-semibold text-[var(--bark-gray)] dark:text-gray-400 mb-2">Rust Disease</h3>
+                        <p class="text-gray-600 dark:text-gray-300 font-semibold">Status: Detected: Rust Disease 🍁</p>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">Description: Caused by fungal spores, rust disease creates pustules on the underside and rusty spots on the top of leaves.</p>
+                        <div class="mt-4">
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold">Cure & Control:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Prune infected leaves immediately
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Avoid splashing water on leaves
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Apply sulfur-based or copper fungicides if severe
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Keep the area around the plant clean and free of debris
+                                </li>
+                            </ul>
+                            <p class="text-gray-600 dark:text-gray-300 font-semibold mt-4">Good Practice:</p>
+                            <ul class="mt-2 space-y-2">
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Rotate crops to prevent soil-borne fungi buildup
+                                </li>
+                                <li class="flex items-center dark:text-gray-300">
+                                    <span class="text-[var(--bark-gray)] dark:text-gray-400 mr-2">☠️</span>
+                                    Improve drainage and reduce humidity
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed top-0 right-0 h-full w-[500px] bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-[var(--leaf-green)] dark:text-green-400">🌿 About Us</h2>
+                <button id="closeSidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6 text-gray-600 dark:text-gray-300">
+                <p>Welcome to VerdantScan – an AI-powered platform created with a vision to revolutionize plant health monitoring.</p>
+                
+                <p>We are a group of innovators passionate about bridging the gap between agriculture and artificial intelligence. Our goal is simple yet impactful:</p>
+                
+                <p class="font-semibold">To empower farmers, gardeners, and nature lovers with real-time plant disease detection using just an image.</p>
+                
+                <p>Through advanced deep learning models, VerdantScan can detect Powdery Mildew, Rust, and identify Healthy leaves with remarkable accuracy. Just upload a leaf image, and let our model do the scanning!</p>
+                
+                <div>
+                    <p class="font-semibold mb-2">Why we built this:</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <span class="mr-2">🌱</span>
+                            To support sustainable farming
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">🔬</span>
+                            To promote early detection and prevention
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">🤝</span>
+                            To make tech accessible in agriculture
+                        </li>
+                    </ul>
+                </div>
+                
+                <p>With an intuitive interface, agro-inspired design, and educational insights, VerdantScan is more than a detection tool — it's your green guardian.</p>
+                
+                <p class="font-semibold text-[var(--leaf-green)] dark:text-green-400">Let's grow smarter, greener and healthier together!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const html = document.documentElement;
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            
+            if (isDark) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+
+        // Sidebar functionality
+        const aboutUsBtn = document.getElementById('aboutUsBtn');
+        const sidebar = document.getElementById('sidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const overlay = document.getElementById('overlay');
+
+        aboutUsBtn.addEventListener('click', () => {
+            sidebar.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Emoji Rain Animation
+        function createEmojiRain(emoji, count = 50) {
+            // Remove any existing emoji rain
+            const existingRain = document.querySelector('.emoji-rain');
+            if (existingRain) {
+                existingRain.remove();
+            }
+
+            // Create new emoji rain container
+            const emojiRain = document.createElement('div');
+            emojiRain.className = 'emoji-rain';
+            document.body.appendChild(emojiRain);
+
+            // Create emojis
+            for (let i = 0; i < count; i++) {
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'emoji';
+                emojiElement.textContent = emoji;
+                
+                // Random position and animation duration
+                const left = Math.random() * 100;
+                const duration = 2 + Math.random() * 3; // 2-5 seconds
+                const delay = Math.random() * 2; // 0-2 seconds
+                
+                emojiElement.style.left = `${left}%`;
+                emojiElement.style.animationDuration = `${duration}s`;
+                emojiElement.style.animationDelay = `${delay}s`;
+                
+                emojiRain.appendChild(emojiElement);
+            }
+
+            // Remove the rain after animation completes
+            setTimeout(() => {
+                emojiRain.remove();
+            }, 6000);
+        }
+
+        // Modify the form submission to include emoji rain
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get the file input
+            const fileInput = document.getElementById('imageUpload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select an image first');
+                return;
+            }
+
+            // Show loading state
+            const submitButton = uploadForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Analyzing...';
+
+            // Create FormData and append the file
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Send the file to the server
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                
+                // Show the result
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('prediction').textContent = result.prediction;
+                document.getElementById('confidence').textContent = `${(result.confidence * 100).toFixed(2)}%`;
+
+                // Create emoji rain based on prediction
+                const prediction = result.prediction.toLowerCase();
+                if (prediction.includes('rust')) {
+                    createEmojiRain('☠️');
+                } else if (prediction.includes('powdery') || prediction.includes('mildew')) {
+                    createEmojiRain('⚠️');
+                } else if (prediction.includes('healthy')) {
+                    createEmojiRain('🌱');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while analyzing the image. Please try again.');
+            } finally {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = 'Analyze Image';
+            }
+        });
+    </script>
+</body>
+</html> 
