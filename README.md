@@ -5,6 +5,7 @@
 ---
 
 📚 Table of Contents
+
 📌 Project Overview
 
 ✨ Features
@@ -84,6 +85,7 @@ http://127.0.0.1:5000
 /
 
 ## 🧰 Technologies Used
+
 - Python
 
 - TensorFlow/Keras for model building
@@ -98,7 +100,8 @@ http://127.0.0.1:5000
 
 ---
 
-🚀 How to Use
+## 🚀 How to Use
+
 - Upload a clear image of a plant leaf through the app.
 
 - The AI model analyzes the image and predicts the condition.
@@ -115,7 +118,8 @@ http://127.0.0.1:5000
 
 ---
 
-🤝 Contributing
+## 🤝 Contributing
+
 We welcome all contributions to enhance VerdantScan! Here's how you can help:
 
 - Fork this repository
