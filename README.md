@@ -6,21 +6,19 @@
 
 📚 Table of Contents
 
-📌 Project Overview
+- 📌 Project Overview
 
-✨ Features
+- ✨ Features
 
-🗂 Dataset Used
+- 🗂 Dataset Used
 
-⚙️ Installation
+- ⚙️ Installation
 
-🧰 Technologies Used
+- 🧰 Technologies Used
 
-🚀 How to Use
+- 🚀 How to Use
 
-🤝 Contributing
-
-📄 License
+- 🤝 Contributing
 
 ---
 
