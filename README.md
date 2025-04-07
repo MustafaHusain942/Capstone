@@ -130,6 +130,6 @@ We welcome all contributions to enhance VerdantScan! Here's how you can help:
   
 - Push the branch:
 ```bash
-git push origin feature-name
+  git push origin feature-name
 ```
 - Open a Pull Request
