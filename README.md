@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 ###  3. Train the Model to Get Weights
 
-Run the .ipynb files inside the Models/ folder to train and save your model weights
+Run the .ipynb files to train and save your model weights
 
 🔁 Make sure to update the model path in app.py
 
