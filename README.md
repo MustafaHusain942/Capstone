@@ -49,7 +49,7 @@ Whether managing a large-scale farm or caring for your home garden, VerdantScan 
 ###  1. Clone the Repository
 
 ```bash
-git clone https://github.com/MustafaHusain942/VerdantScan.git
+git clone https://github.com/MustafaHusain942/Capstone.git
 cd VerdantScan
 ```
 
